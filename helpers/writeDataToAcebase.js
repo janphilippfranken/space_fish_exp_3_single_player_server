@@ -6,7 +6,8 @@ const db = new AceBaseClient({
     dbname: process.env.ACEBASE_DBNAME,
     host: 'localhost',
     port: process.env.ACEBASE_PORT,
-    https: false
+    https: false,
+  
 });
 
 // Keep retrying connection to server with a 1s timeout in between.
@@ -31,6 +32,8 @@ function try_db() {
 try_db();
 
 const storeData = (data, roomID) => {
+    console.log('stored');
+    console.log(data);
     db.ref(roomID)
       .push(data)
       .then(res => res)

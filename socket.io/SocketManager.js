@@ -56,7 +56,7 @@ class SocketManager {
                 // adding fake players
                 const player2 = {name: 'jax',
                                 id: 'simulated_player_two',
-                                stimuli: ['subject2', 'independent', 1, [ '67.5%', '71.75%', '0%', '3%', '75%' ]]
+                                stimuli: ['subject2', 'independent', 1, [ '67.5%', '71.75%', '0%', '3%', '75%' ]] // this will be overwritten 
                             };
 
                 const player3 = {name: 'tia',
@@ -124,11 +124,42 @@ class SocketManager {
                 
                 room.planetSelections[planetSelectionTrial.participantId].push(planetSelectionTrial); // real participant
                 
+                const trial = room.planetSelections[planetSelectionTrial.participantId].length;
+                var trialIdx = trial;
+                var bIdx = 1;
+                var cIdx = 2;
+                if (trial === 11){
+                    trialIdx = 10
+                    bIdx = 0;
+                    cIdx = 1;
+                };
+                console.log(room.participants);
+                console.log('test');
+                console.log(trial);
+                const bJugdment = room.participants[bIdx].stimuli[5][trialIdx-1];
+                const cJugdment = room.participants[cIdx].stimuli[5][trialIdx-1];
+                const roomNumber = room.participants[1].stimuli[4];
+
+                var bJugdmentColor = "lightgrey";
+                var cJugdmentColor = "lightgrey";
+
+                if (bJugdment < 0){
+                    bJugdmentColor = 'deepskyblue'
+                } else if (bJugdment > 0) {
+                    bJugdmentColor = 'red'
+                };
+
+                if (cJugdment < 0){
+                    cJugdmentColor = 'deepskyblue'
+                } else if (cJugdment > 0) {
+                    cJugdmentColor = 'red'
+                };
+
                 // fake participants 
                 const simPlayerTwoSelections = {
                     participantId: 'simulated_player_two',
-                    confidence: 2,
-                    color: 'blue',
+                    confidence: Math.abs(bJugdment),
+                    color: bJugdmentColor,
                     conditionNumber: planetSelectionTrial.participantId.conditionNumber,
                     participantPID: { PID: 'x' },
                     participantNumber: 'subject2',
@@ -138,13 +169,14 @@ class SocketManager {
                     IPAdress: planetSelectionTrial.participantId.IPAdress,
                     training: { training: 'x' },
                     socialTraining: { socialTraining: 'x' },
-                    socialTrainingStructure: { socialTrainingStructure: 'x' }
-                };
+                    socialTrainingStructure: { socialTrainingStructure: 'x' },
+                    roomNumber: roomNumber
+                }
 
                 const simPlayerThreeSelections = {
                     participantId: 'simulated_player_two',
-                    confidence: 0,
-                    color: 'white',
+                    confidence: Math.abs(cJugdment),
+                    color: cJugdmentColor,
                     conditionNumber: planetSelectionTrial.participantId.conditionNumber,
                     participantPID: { PID: 'x' },
                     participantNumber: 'subject2',
@@ -154,18 +186,13 @@ class SocketManager {
                     IPAdress: planetSelectionTrial.participantId.IPAdress,
                     training: { training: 'x' },
                     socialTraining: { socialTraining: 'x' },
-                    socialTrainingStructure: { socialTrainingStructure: 'x' }
+                    socialTrainingStructure: { socialTrainingStructure: 'x' },
+                    roomNumber: roomNumber
                 };
-
-
-
-
 
                 room.planetSelections['simulated_player_two'].push(simPlayerTwoSelections);
                 room.planetSelections['simulated_player_three'].push(simPlayerThreeSelections);
              
- 
-
                 console.log(room);
                 this.io.in(room.id).emit('update-room', room);
                 
