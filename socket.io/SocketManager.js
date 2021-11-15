@@ -1,4 +1,4 @@
-const writeData = require('../helpers/writeDataToFirebase');
+const writeData = require('../helpers/writeDataToAcebase');
 const Participant = require('../models/participant');
 const shuffleData = require('../stimuli');
 const Room = require('../models/room');
