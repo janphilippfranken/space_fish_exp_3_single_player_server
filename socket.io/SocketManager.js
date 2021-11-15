@@ -3,12 +3,6 @@ const Participant = require('../models/participant');
 const shuffleData = require('../stimuli');
 const Room = require('../models/room');
 
-// const play = () => {   
-//     const beepsound = new Audio('https://www.soundjay.com/button/sounds/beep-01a.mp3');   
-//     beepsound.play();   
-// };   
-
-// // play();
 
 
 class SocketManager {
@@ -37,61 +31,53 @@ class SocketManager {
                 room.addParticipant(participant);
                 // for other partiticpants assign other stimuli 
                 const stimuli = shuffleData();
-               
-               
                 participant.stimuli = stimuli[room.participants.length-1]
-                if (room.participants.length === 3) {
+                
+                if (room.participants.length === 3) { // this stuff only gets evaluated if other real people join, in the sinlge player version, we just predefine everything for the other two
                     room.hasTaskStarted = true;
-
-                    // shuffles the stimuli
+                    console.log('started');
                     const stimuli = shuffleData();
-
-
-                    // initial order of pp
-                    const initRoomPP = [room.participants[0], room.participants[1], room.participants[2]];
-                    
-                    // now reordering pp in room randomly
+                    const initRoomPP = [room.participants[0], room.participants[1], room.participants[2]];   
+                    // reordering pp in room randomly
                     room.participants[0] = initRoomPP[stimuli[3][0]];
                     room.participants[1] = initRoomPP[stimuli[3][1]];
                     room.participants[2] = initRoomPP[stimuli[3][2]];
-
-                    // now assigning 1,2,3 order to shuffled pp
+                    // assigning 1,2,3 order to shuffled pp
                     room.participants[0].stimuli = stimuli[0];
                     room.participants[1].stimuli = stimuli[1];
                     room.participants[2].stimuli = stimuli[2];
-
-
-                    // room.participants.stimuli[0] = stimuli[stimuli[3][0]];
-                    // room.participants.stimuli[1] = stimuli[stimuli[3][1]];
-                    // room.participants.stimuli[2] = stimuli[stimuli[3][2]];
-
-                    // room.participants[0].name = allNames[stimuli[3][0]];
-                    // room.participants[1].name = allNames[stimuli[3][1]];
-                    // room.participants[2].name = allNames[stimuli[3][2]];
-
-                    // room.participants[0].id = allIDs[stimuli[3][0]];
-                    // room.participants[1].id = allIDs[stimuli[3][1]];
-                    // room.participants[2].id = allIDs[stimuli[3][2]];
-
-
-                
-                    console.log(room);
-                    console.log(room.participants);
-                    console.log(room.participants[0].stimuli)
-                    console.log(room.participants[1].stimuli)
-                    console.log(room.participants[2].stimuli)
-                    // shuffle here 
                 }
             } else {
-                // there is no available room, create one
                 room = new Room();
-                // for first participant assign stimuli 0
                 const stimuli = shuffleData();
-                console.log(stimuli);
                 participant.stimuli = stimuli[0];
-                console.log(participant);
-                room.addParticipant(participant);
+                // adding the real player
+                room.addParticipant(participant); 
+                // adding fake players
+                const player2 = {name: 'jax',
+                                id: 'simulated_player_two',
+                                stimuli: ['subject2', 'independent', 1, [ '67.5%', '71.75%', '0%', '3%', '75%' ]]
+                            };
+
+                const player3 = {name: 'tia',
+                                 id: 'simulated_player_three',
+                                 stimuli: ['subject3', 'independent', 1, [ '67.5%', '71.75%', '0%', '3%', '75%' ]]
+                            };
+
+                room.addParticipant(player2); 
+                room.addParticipant(player3); 
                 this.roomsRep.addRoom(room);
+                room.hasTaskStarted = true;
+  
+                // now assigning 1,2,3 order to shuffled pp
+                room.participants[0].stimuli = stimuli[0];
+                room.participants[1].stimuli = stimuli[1];
+                room.participants[2].stimuli = stimuli[2];
+                console.log('started');
+                console.log(room);
+                console.log(room.participants[0].stimuli);
+                console.log(room.participants[1].stimuli);
+                console.log(room.participants[2].stimuli);
             }
             this.socket.join(room.id);
             this.io.in(room.id).emit('available-room', room);
@@ -126,22 +112,60 @@ class SocketManager {
 
     participantPlanetSelectionTrial() {
         this.socket.on('planet-selected', ( {planetSelectionTrial, roomId} ) => {
-            console.log('data');
-            console.log(roomId);
-            // need room access 
-            // roomname coming from client server 
-            console.log(this.roomsRep);
-            console.log('roomsRep');
-     
+            const sim2 = 'simulated_player_two';
+            const sim3 = 'simulated_player_three';
             const room = this.roomsRep.getRoomById(roomId);
-            console.log(room);
-            console.log('room');
             if (room) {
                 if (!room.planetSelections[planetSelectionTrial.participantId]) {
                     room.planetSelections[planetSelectionTrial.participantId] = [];
+                    room.planetSelections['simulated_player_two'] = [];
+                    room.planetSelections['simulated_player_three'] = [];
                 };
                 
-                room.planetSelections[planetSelectionTrial.participantId].push(planetSelectionTrial);
+                room.planetSelections[planetSelectionTrial.participantId].push(planetSelectionTrial); // real participant
+                
+                // fake participants 
+                const simPlayerTwoSelections = {
+                    participantId: 'simulated_player_two',
+                    confidence: 2,
+                    color: 'blue',
+                    conditionNumber: planetSelectionTrial.participantId.conditionNumber,
+                    participantPID: { PID: 'x' },
+                    participantNumber: 'subject2',
+                    globalCondition: planetSelectionTrial.participantId.globalCondition,
+                    globalFish: planetSelectionTrial.participantId.globalFish,
+                    simulatedResponse: true,
+                    IPAdress: planetSelectionTrial.participantId.IPAdress,
+                    training: { training: 'x' },
+                    socialTraining: { socialTraining: 'x' },
+                    socialTrainingStructure: { socialTrainingStructure: 'x' }
+                };
+
+                const simPlayerThreeSelections = {
+                    participantId: 'simulated_player_two',
+                    confidence: 0,
+                    color: 'white',
+                    conditionNumber: planetSelectionTrial.participantId.conditionNumber,
+                    participantPID: { PID: 'x' },
+                    participantNumber: 'subject2',
+                    globalCondition: planetSelectionTrial.participantId.globalCondition,
+                    globalFish: planetSelectionTrial.participantId.globalFish,
+                    simulatedResponse: true,
+                    IPAdress: planetSelectionTrial.participantId.IPAdress,
+                    training: { training: 'x' },
+                    socialTraining: { socialTraining: 'x' },
+                    socialTrainingStructure: { socialTrainingStructure: 'x' }
+                };
+
+
+
+
+
+                room.planetSelections['simulated_player_two'].push(simPlayerTwoSelections);
+                room.planetSelections['simulated_player_three'].push(simPlayerThreeSelections);
+             
+ 
+
                 console.log(room);
                 this.io.in(room.id).emit('update-room', room);
                 
@@ -162,15 +186,6 @@ class SocketManager {
 
     participantDebrief() {
         this.socket.on('debrief-selected', ( {debriefDataF, roomId} ) => {
-            
-    
-            // const room = this.roomsRep.getRoomById(roomId); 
-            // room.planetSelections[planetSelectionTrial.participantId].push(debriefData);
-            // console.log(room);
-            // this.io.in(room.id).emit('update-room', room);
-            
-            // console.log('debrief');
-            // console.log(planetSelectionTrial);
             // write data 
             console.log('managed to reach server');
             console.log(debriefDataF);

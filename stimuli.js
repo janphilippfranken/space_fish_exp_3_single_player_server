@@ -1,8 +1,9 @@
+// note this is the single player version in which everyone is participant A = 0 = subject 1
 const shuffle = require('./helpers/shuffleArray');
 
 const shuffleData = () => {
     const conditions = shuffle(['lr', 'independent']);
-    const randSubjMatch = shuffle([0,1,2]);
+    const randSubjMatch = [0,1,2];
     const randFishMatch = shuffle([0,1]); // 0 = red, 1 = blue 
     const selectedCondition = conditions[0];
     const FishA = randFishMatch[0]; // fish for subj1
