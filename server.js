@@ -20,5 +20,3 @@ const io = require('./socket.io/socket-setup').init(server);
 const roomsRep = require('./repositories/room-repository').initRooms();
 const participantsRep = require('./repositories/participant-repository').initParticipants();
 require('./socket.io/socket-on-connection')(io, roomsRep, participantsRep); 
-
-
