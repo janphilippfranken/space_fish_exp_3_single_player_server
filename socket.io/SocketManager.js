@@ -198,7 +198,6 @@ class SocketManager {
                 
                 console.log('debrief');
                 console.log(planetSelectionTrial);
-                // write data 
                 writeData(room, room.id);
             } else if (!room) {
                 console.log('managed to reach server');
