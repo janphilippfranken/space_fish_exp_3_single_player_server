@@ -16,7 +16,7 @@ const shuffleData = () => {
 
     const conditions = shuffle(['lr', 'independent']);
     const randSubjMatch = [0,1,2];
-    const randFishMatch = shuffle([0,1]); // 0 = red, 1 = blue 
+    const randFishMatch = shuffle([0,0]); // 0 = red, 1 = blue 
     const selectedCondition = conditions[0];
     const FishA = randFishMatch[0]; // fish for subj
     const FishB = randFishMatch[1]; // fish for subj2

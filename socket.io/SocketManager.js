@@ -174,12 +174,12 @@ class SocketManager {
                 }
 
                 const simPlayerThreeSelections = {
-                    participantId: 'simulated_player_two',
+                    participantId: 'simulated_player_three',
                     confidence: Math.abs(cJugdment),
                     color: cJugdmentColor,
                     conditionNumber: planetSelectionTrial.participantId.conditionNumber,
                     participantPID: { PID: 'x' },
-                    participantNumber: 'subject2',
+                    participantNumber: 'subject3',
                     globalCondition: planetSelectionTrial.participantId.globalCondition,
                     globalFish: planetSelectionTrial.participantId.globalFish,
                     simulatedResponse: true,
