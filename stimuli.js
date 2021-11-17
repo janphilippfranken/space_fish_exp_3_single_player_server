@@ -4,24 +4,37 @@ const fs = require("fs");
 const shuffle = require('./helpers/shuffleArray');
 
 const shuffleData = () => {
-    const indepJudgments = require('./independent_planet_judgments.json');
-    const lrJudgments = require('./b_c_planet_judgments.json');
-    const roomCount = require('./room_idx.json');
-    var countIncrement = roomCount.room; // increases each time
+    const randFishMatch = shuffle([0,1]); // 0 = red, 1 = blue  -> determines which color fish has that subj samples 
+    const FishA = randFishMatch[0]; // fish for subj
 
-    if (countIncrement === 21) { // reset after reaching max n_rooms
+    var indepJudgments;  // judg from other players 
+    var lrJudgments;
+
+    if (FishA === 0){    // if red for subj, play red flip version
+        indepJudgments = require('./independent_planet_judgments_red_flip.json');
+        lrJudgments = require('./b_c_planet_judgments_red_flip.json');
+    } else if (FishA === 1) { // else play blue flip version
+        indepJudgments = require('./independent_planet_judgments_blue_flip.json');
+        lrJudgments = require('./b_c_planet_judgments_blue_flip.json');
+    };
+    
+    const roomCount = require('./room_idx.json');  // determines which room we are using for the task 
+    var countIncrement = roomCount.room; // increases each time and resets to 0 if all rooms have been used 
+    if (countIncrement === 21) { // reset after reaching max n_rooms -> we have 21 rooms
         countIncrement = 0
     };
-   
 
-    const conditions = shuffle(['lr', 'independent']);
-    const randSubjMatch = [0,1,2];
-    const randFishMatch = shuffle([0,0]); // 0 = red, 1 = blue 
+    const conditions = shuffle(['lr', 'independent']); // now randomly shuffle condition in which subject is in
     const selectedCondition = conditions[0];
-    const FishA = randFishMatch[0]; // fish for subj
+    
+    const randSubjMatch = [0,1,2];  // these variables are not relevant anymore for exp3 but are kept in case we want to change smth later
     const FishB = randFishMatch[1]; // fish for subj2
     const FishC = randFishMatch[0]; // fish for subj3
     
+    console.log(FishA);
+    console.log(selectedCondition);
+
+    // now pick judgments for B and C from json files
     var selectedJudgments;
     var bJudgments;
     var cJudgments;
@@ -36,16 +49,19 @@ const shuffleData = () => {
     bJudgments = selectedJudgments.B[countIncrement];
     cJudgments = selectedJudgments.C[countIncrement];
 
+    console.log('length');
+    console.log(selectedJudgments.C.length);
+
+    // assign positions
     const positions = [['67.5%', '71.75%', '0%', '3%', '75%'], ['77.25%', '81.5%', '26%', '29%', '85%'], ['87%', '91.5%', '50%', '55%', '95%']]; //left position percentages for subjects 1-3, innner arrays: 1)legend name, legend score, trial score name, trial score 
     const positionA = positions[0];
     const positionB = positions[1];
     const positionC = positions[2];
     
-
     const targetBeliefs = [['subject1', selectedCondition, FishA, positionA], ['subject2', selectedCondition, FishB, positionB, countIncrement, bJudgments], ['subject3', selectedCondition, FishC, positionC, countIncrement, cJudgments], randSubjMatch];
     
+    // increment and reseset room
     countIncrement = countIncrement + 1;
-    
     roomCount.room = countIncrement;
 
     fs.writeFile('./room_idx.json', JSON.stringify(roomCount), function writeJSON(err) {
