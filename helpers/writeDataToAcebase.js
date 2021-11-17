@@ -32,6 +32,7 @@ function try_db() {
 try_db();
 
 const storeData = (data, roomID) => {
+    console.log(data);
     db.ref(roomID)
       .push(data)
       .then(res => res)
