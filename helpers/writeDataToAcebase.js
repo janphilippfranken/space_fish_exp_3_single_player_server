@@ -3,7 +3,8 @@ const { AceBaseClient } = require("acebase-client");
 
 const db = new AceBaseClient({
     autoConnect: false,
-    dbname: process.env.ACEBASE_DBNAME,
+    dbname: 
+    process.env.ACEBASE_DBNAME,
     host: 'localhost',
     port: process.env.ACEBASE_PORT,
     https: false
