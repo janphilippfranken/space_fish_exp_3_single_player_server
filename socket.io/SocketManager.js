@@ -35,7 +35,7 @@ class SocketManager {
                 
                 if (room.participants.length === 3) { // this stuff only gets evaluated if other real people join, in the sinlge player version, we just predefine everything for the other two
                     room.hasTaskStarted = true;
-                    console.log('started');
+                    // console.log('started');
                     const stimuli = shuffleData();
                     const initRoomPP = [room.participants[0], room.participants[1], room.participants[2]];   
                     // reordering pp in room randomly
@@ -73,11 +73,11 @@ class SocketManager {
                 room.participants[0].stimuli = stimuli[0];
                 room.participants[1].stimuli = stimuli[1];
                 room.participants[2].stimuli = stimuli[2];
-                console.log('started');
-                console.log(room);
-                console.log(room.participants[0].stimuli);
-                console.log(room.participants[1].stimuli);
-                console.log(room.participants[2].stimuli);
+                // console.log('started');
+                // console.log(room);
+                // console.log(room.participants[0].stimuli);
+                // console.log(room.participants[1].stimuli);
+                // console.log(room.participants[2].stimuli);
             }
             this.socket.join(room.id);
             this.io.in(room.id).emit('available-room', room);
@@ -133,9 +133,9 @@ class SocketManager {
                     bIdx = 0;
                     cIdx = 1;
                 };
-                console.log(room.participants);
-                console.log('test');
-                console.log(trial);
+                // console.log(room.participants);
+                // console.log('test');
+                // console.log(trial);
                 const bJugdment = room.participants[bIdx].stimuli[5][trialIdx-1];
                 const cJugdment = room.participants[cIdx].stimuli[5][trialIdx-1];
                 const roomNumber = room.participants[1].stimuli[4];
@@ -166,6 +166,7 @@ class SocketManager {
                     globalCondition: planetSelectionTrial.participantId.globalCondition,
                     globalFish: planetSelectionTrial.participantId.globalFish,
                     simulatedResponse: true,
+                    structureHint: planetSelectionTrial.participantId.structureHint,
                     IPAdress: planetSelectionTrial.participantId.IPAdress,
                     training: { training: 'x' },
                     socialTraining: { socialTraining: 'x' },
@@ -183,6 +184,7 @@ class SocketManager {
                     globalCondition: planetSelectionTrial.participantId.globalCondition,
                     globalFish: planetSelectionTrial.participantId.globalFish,
                     simulatedResponse: true,
+                    structureHint: planetSelectionTrial.participantId.structureHint,
                     IPAdress: planetSelectionTrial.participantId.IPAdress,
                     training: { training: 'x' },
                     socialTraining: { socialTraining: 'x' },
@@ -193,15 +195,15 @@ class SocketManager {
                 room.planetSelections['simulated_player_two'].push(simPlayerTwoSelections);
                 room.planetSelections['simulated_player_three'].push(simPlayerThreeSelections);
              
-                console.log(room);
+                // console.log(room);
                 this.io.in(room.id).emit('update-room', room);
                 
-                console.log('debrief');
-                console.log(planetSelectionTrial);
+                // console.log('debrief');
+                // console.log(planetSelectionTrial);
                 writeData(room, room.id);
             } else if (!room) {
-                console.log('managed to reach server');
-                console.log(planetSelectionTrial);
+                // console.log('managed to reach server');
+                // console.log(planetSelectionTrial);
                 writeData(planetSelectionTrial, roomId);
             };
 
@@ -215,8 +217,8 @@ class SocketManager {
     participantDebrief() {
         this.socket.on('debrief-selected', ( {debriefDataF, roomId} ) => {
             // write data 
-            console.log('managed to reach server');
-            console.log(debriefDataF);
+            // console.log('managed to reach server');
+            // console.log(debriefDataF);
             writeData(debriefData, roomId);
            
         });
