@@ -34,7 +34,7 @@ const shuffleData = () => {
         console.log('no hint given')
         roomCount = require('./room_no_idx.json');  // determines which room we are using for the task 
         countIncrement = roomCount.room; // increases each time and resets to 0 if all rooms have been used 
-        if (countIncrement === 19) { // reset after reaching max n_rooms -> we have 19 rooms
+        if (countIncrement === 6) { // reset after reaching max n_rooms -> we have 19 rooms
             countIncrement = 0
         };
 
@@ -42,7 +42,7 @@ const shuffleData = () => {
         console.log('strong')
         roomCount = require('./room_strong_idx.json');  
         countIncrement = roomCount.room; 
-        if (countIncrement === 19) { 
+        if (countIncrement === 6) { 
             countIncrement = 0;
         };
     }
