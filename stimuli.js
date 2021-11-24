@@ -19,7 +19,7 @@ const shuffleData = () => {
     
     // structure condition 
     const conditions = shuffle(['lr', 'lr']); // now randomly shuffle condition in which subject is in -> we here stick to 'lr', but can change to 2x2 by setting one to 'independent'
-    // const structureHint = shuffle(['weak', 'strong']); // new between subj manipulation 
+    // const structureHint = shuffle(['no', 'strong']); // new between subj manipulation 
     const selectedCondition = conditions[0];
 
 
@@ -30,9 +30,9 @@ const shuffleData = () => {
     var countIncrement;
     console.log(selectedHint);
 
-    if (selectedHint === 'weak') {
-        console.log("hi");
-        roomCount = require('./room_weak_idx.json');  // determines which room we are using for the task 
+    if (selectedHint === 'no') {
+        console.log('no hint given')
+        roomCount = require('./room_no_idx.json');  // determines which room we are using for the task 
         countIncrement = roomCount.room; // increases each time and resets to 0 if all rooms have been used 
         if (countIncrement === 19) { // reset after reaching max n_rooms -> we have 19 rooms
             countIncrement = 0
@@ -88,20 +88,20 @@ const shuffleData = () => {
     var resetStruct;
 
     // change structure based on selection and update indx 
-    if (selectedHint === 'weak') {
-        resetStruct = 'strong';
-        console.log('weak hint check');
-        fs.writeFile('./room_weak_idx.json', JSON.stringify(roomCount), function writeJSON(err) {
+    if (selectedHint === 'no') {
+        resetStruct = 'no'; // can reset these to smth else if server decides allocation, for now we decide it and just reuse the same
+        console.log('no hint check');
+        fs.writeFile('./room_no_idx.json', JSON.stringify(roomCount), function writeJSON(err) {
             if (err) return console.log(err);
             console.log(JSON.stringify(roomCount));
-            console.log('writing to ' + './room_weak_idx.json');
+            console.log('writing to ' + './room_no_idx.json');
         })
     };
         
         
     if (selectedHint === 'strong') {
         console.log('strong hint check');
-        resetStruct = 'weak';
+        resetStruct = 'strong'; 
         fs.writeFile('./room_strong_idx.json', JSON.stringify(roomCount), function writeJSON(err) {
             if (err) return console.log(err);
             console.log(JSON.stringify(roomCount));
