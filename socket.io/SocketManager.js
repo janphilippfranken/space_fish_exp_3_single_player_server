@@ -130,12 +130,21 @@ class SocketManager {
                 var cIdx = 2;
                 if (trial === 11){
                     trialIdx = 10
+                    // bIdx = 0;
+                    // cIdx = 1;
+                };
+
+                if (trial === 12){
+                    trialIdx = 10
                     bIdx = 0;
                     cIdx = 1;
                 };
-                // console.log(room.participants);
-                // console.log('test');
-                // console.log(trial);
+                console.log(room.participants);
+                console.log('test');
+                console.log(bIdx, cIdx);
+                console.log(trialIdx)
+                console.log(trial);
+              
                 const bJugdment = room.participants[bIdx].stimuli[5][trialIdx-1];
                 const cJugdment = room.participants[cIdx].stimuli[5][trialIdx-1];
                 const roomNumber = room.participants[1].stimuli[4];
