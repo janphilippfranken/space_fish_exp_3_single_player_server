@@ -11,15 +11,15 @@ const shuffleData = () => {
     var lrJudgments; // update judgments of other players based on fish color 
     if (FishA === 0){    // if red for subj, play red flip version
         // indepJudgments = require('./independent_planet_judgments_red_flip.json');
-        lrJudgments = require('./b_c_planet_judgments_red_flip.json');
+        lrJudgments = require('./normative_room_red_flip.json');
     } else if (FishA === 1) { // else play blue flip version
         // indepJudgments = require('./independent_planet_judgments_blue_flip.json');
-        lrJudgments = require('./b_c_planet_judgments_blue_flip.json');
+        lrJudgments = require('./normative_room_blue_flip.json');
     };
     
     // structure condition 
     const conditions = shuffle(['lr', 'lr']); // now randomly shuffle condition in which subject is in -> we here stick to 'lr', but can change to 2x2 by setting one to 'independent'
-    // const structureHint = shuffle(['no', 'strong']); // new between subj manipulation 
+    const structureHint = shuffle(['no', 'strong']); // new between subj manipulation 
     const selectedCondition = conditions[0];
 
 
@@ -28,13 +28,14 @@ const shuffleData = () => {
     const selectedHint = loadHint.hint;
     var roomCount;
     var countIncrement;
+    var countIncrement = 0;
     console.log(selectedHint);
 
     if (selectedHint === 'no') {
         console.log('no hint given')
         roomCount = require('./room_no_idx.json');  // determines which room we are using for the task 
         countIncrement = roomCount.room; // increases each time and resets to 0 if all rooms have been used 
-        if (countIncrement === 6) { // reset after reaching max n_rooms -> we have 19 rooms
+        if (countIncrement === 1) { // reset after reaching max n_rooms -> we have 19 rooms
             countIncrement = 0
         };
 
@@ -42,10 +43,12 @@ const shuffleData = () => {
         console.log('strong')
         roomCount = require('./room_strong_idx.json');  
         countIncrement = roomCount.room; 
-        if (countIncrement === 6) { 
+        if (countIncrement === 1) { 
             countIncrement = 0;
         };
     }
+
+
    
     // fish allocation 
     const randSubjMatch = [0,1,2];  // these variables are not relevant anymore for exp3 but are kept in case we want to change smth later
@@ -64,8 +67,10 @@ const shuffleData = () => {
     var cJudgments;
     
     selectedJudgments = lrJudgments;
-    bJudgments = selectedJudgments.B[countIncrement];
-    cJudgments = selectedJudgments.C[countIncrement];
+    // bJudgments = selectedJudgments.B[countIncrement];
+    // cJudgments = selectedJudgments.C[countIncrement];
+    bJudgments = selectedJudgments.B[0];
+    cJudgments = selectedJudgments.C[0];
 
     console.log(bJudgments);
 
