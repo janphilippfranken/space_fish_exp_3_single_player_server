@@ -131,8 +131,8 @@ class SocketManager {
                 if (trial === 11){
                     trialIdx = 10
                     console.log('structure known need to move idx below if structure unknown');
-                    bIdx = 0;
-                    cIdx = 1;
+                    // bIdx = 0;
+                    // cIdx = 1;
                 };
 
                 if (trial === 12){
