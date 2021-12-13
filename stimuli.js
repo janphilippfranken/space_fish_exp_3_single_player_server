@@ -11,7 +11,7 @@ const shuffleData = () => {
     var lrJudgments; // update judgments of other players based on fish color 
     if (FishA === 0){    // if red for subj, play red flip version
         // indepJudgments = require('./independent_planet_judgments_red_flip.json');
-        lrJudgments = require('./normative_room_judgments_red_flip');
+        lrJudgments = require('./normative_room_red_flip');
     } else if (FishA === 1) { // else play blue flip version
         // indepJudgments = require('./independent_planet_judgments_blue_flip.json');
         lrJudgments = require('./normative_room_blue_flip.json');
