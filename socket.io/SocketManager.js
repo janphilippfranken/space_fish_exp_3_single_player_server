@@ -131,15 +131,15 @@ class SocketManager {
                 if (trial === 11){
                     trialIdx = 10
                     console.log('structure known need to move idx below if structure unknown');
-                    bIdx = 0;
-                    cIdx = 1;
+                    // bIdx = 0;
+                    // cIdx = 1;
                 };
 
                 if (trial === 12){
                     console.log('structure unknown')
                     trialIdx = 10
-                    // bIdx = 0;
-                    // cIdx = 1;
+                    bIdx = 0;
+                    cIdx = 1;
                 };
                 console.log(room.participants);
                 console.log('test');
